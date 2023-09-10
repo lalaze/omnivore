@@ -13,6 +13,8 @@ services:
       interval: 2s
       timeout: 12s
       retries: 3
+    ports:
+      - "6432:5432"
     expose:
       - 5432
 
@@ -41,10 +43,11 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.1
     container_name: "omnivore-elastic"
     healthcheck:
-      test: curl 0.0.0.0:9200/_cat/health >/dev/null || exit 1
+      test: curl localhost:9200/_cat/health || exit 1
       interval: 2s
       timeout: 2s
       retries: 5
+      start_period: 20s
     environment:
       - discovery.type=single-node
       - http.cors.allow-origin=*
@@ -77,7 +80,7 @@ services:
       timeout: 12s
       retries: 3
     ports:
-      - "6379:6379"
+      - "7379:6379"
 
   api:
     build:
@@ -104,7 +107,7 @@ services:
       - IMAGE_PROXY_SECRET=some-secret
       - JWT_SECRET=some_secret
       - SSO_JWT_SECRET=some_sso_secret
-      - CLIENT_URL=http://localhost:3000
+      - CLIENT_URL=http://192.168.0.155:3000
       - GATEWAY_URL=http://localhost:8080/api
       - CONTENT_FETCH_URL=http://content-fetch:8080/?token=some_token
       - REMINDER_TASK_HANDLER_URL=/svc/reminders/trigger
@@ -122,17 +125,17 @@ services:
       dockerfile: ./packages/web/Dockerfile
       args:
         - APP_ENV=prod
-        - BASE_URL=http://localhost:3000
-        - SERVER_BASE_URL=http://localhost:4000
-        - HIGHLIGHTS_BASE_URL=http://localhost:3000
+        - BASE_URL=http://192.168.0.155:3000
+        - SERVER_BASE_URL=http://192.168.0.155:4000
+        - HIGHLIGHTS_BASE_URL=http://192.168.0.155:3000
     container_name: "omnivore-web"
     ports:
       - "3000:8080"
     environment:
       - NEXT_PUBLIC_APP_ENV=prod
-      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
-      - NEXT_PUBLIC_SERVER_BASE_URL=http://localhost:4000
-      - NEXT_PUBLIC_HIGHLIGHTS_BASE_URL=http://localhost:3000
+      - NEXT_PUBLIC_BASE_URL=http://192.168.0.155:3000
+      - NEXT_PUBLIC_SERVER_BASE_URL=http://192.168.0.155:4000
+      - NEXT_PUBLIC_HIGHLIGHTS_BASE_URL=http://192.168.0.155:3000
     depends_on:
       api:
         condition: service_healthy

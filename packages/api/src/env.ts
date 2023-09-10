@@ -5,7 +5,7 @@ export const env = getEnv()
 export function homePageURL(): string {
   switch (env.server.apiEnv) {
     case 'local':
-      return 'http://localhost:3000'
+      return 'http://omnivore.home.com'
     case 'demo':
       return 'https://demo.omnivore.app'
     case 'qa':
