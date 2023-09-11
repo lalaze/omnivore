@@ -107,7 +107,7 @@ services:
       - IMAGE_PROXY_SECRET=some-secret
       - JWT_SECRET=some_secret
       - SSO_JWT_SECRET=some_sso_secret
-      - CLIENT_URL=http://192.168.0.155:3000
+      - CLIENT_URL=http://omnivore.home.com
       - GATEWAY_URL=http://localhost:8080/api
       - CONTENT_FETCH_URL=http://content-fetch:8080/?token=some_token
       - REMINDER_TASK_HANDLER_URL=/svc/reminders/trigger
@@ -125,17 +125,17 @@ services:
       dockerfile: ./packages/web/Dockerfile
       args:
         - APP_ENV=prod
-        - BASE_URL=http://192.168.0.155:3000
+        - BASE_URL=http://omnivore.home.com
         - SERVER_BASE_URL=http://192.168.0.155:4000
-        - HIGHLIGHTS_BASE_URL=http://192.168.0.155:3000
+        - HIGHLIGHTS_BASE_URL=http://omnivore.home.com
     container_name: "omnivore-web"
     ports:
       - "3000:8080"
     environment:
       - NEXT_PUBLIC_APP_ENV=prod
-      - NEXT_PUBLIC_BASE_URL=http://192.168.0.155:3000
+      - NEXT_PUBLIC_BASE_URL=http://omnivore.home.com
       - NEXT_PUBLIC_SERVER_BASE_URL=http://192.168.0.155:4000
-      - NEXT_PUBLIC_HIGHLIGHTS_BASE_URL=http://192.168.0.155:3000
+      - NEXT_PUBLIC_HIGHLIGHTS_BASE_URL=http://omnivore.home.com
     depends_on:
       api:
         condition: service_healthy
